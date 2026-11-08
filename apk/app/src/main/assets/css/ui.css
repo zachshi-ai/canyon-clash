@@ -1,0 +1,226 @@
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #05090c; }
+body {
+  font-family: -apple-system, "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+  color: #eaf2ff; user-select: none; -webkit-user-select: none; touch-action: none;
+}
+#app { position: fixed; inset: 0; }
+#game { position: absolute; inset: 0; display: block; }
+.hidden { display: none !important; }
+
+/* ---------- 顶部信息 ---------- */
+#topbar {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 10px;
+  padding: 5px 14px; border-radius: 20px;
+  background: rgba(8, 14, 22, 0.72);
+  border: 1px solid rgba(120, 170, 220, 0.25);
+  backdrop-filter: blur(6px);
+  font-variant-numeric: tabular-nums;
+}
+#timer { font-size: 15px; font-weight: 600; color: #cfe4ff; letter-spacing: 0.5px; }
+.score { min-width: 34px; text-align: center; font-size: 17px; font-weight: 700; }
+.score.blue { color: #6fa8ff; }
+.score.red { color: #ff8272; }
+
+/* ---------- 小地图 ---------- */
+#minimap {
+  position: absolute; top: 10px; left: 10px;
+  width: 156px; height: 156px; border-radius: 12px;
+  border: 1px solid rgba(120, 170, 220, 0.3);
+  background: rgba(6, 12, 16, 0.8);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+}
+
+/* ---------- 玩家状态 ---------- */
+#pstat {
+  position: absolute; left: 12px; bottom: 10px; width: 236px; pointer-events: none;
+  padding: 8px 10px; border-radius: 12px;
+  background: rgba(8, 14, 22, 0.78);
+  border: 1px solid rgba(120, 170, 220, 0.22);
+}
+#pstat .row { display: flex; align-items: center; gap: 8px; }
+.avatar {
+  width: 38px; height: 38px; border-radius: 50%; object-fit: cover; object-position: 50% 22%;
+  border: 1.5px solid rgba(255, 226, 122, 0.6); flex: 0 0 auto;
+  box-shadow: 0 0 10px rgba(255, 200, 90, 0.25);
+}
+#pLevel {
+  width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: #ffe27a;
+  background: rgba(255, 226, 122, 0.12);
+  border: 1px solid rgba(255, 226, 122, 0.55);
+  flex: 0 0 auto;
+}
+.bars { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+.bar {
+  position: relative; height: 13px; border-radius: 7px; overflow: hidden;
+  background: rgba(0, 0, 0, 0.55); border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.bar.mp { height: 9px; }
+.bar i { position: absolute; inset: 0; width: 100%; transform-origin: left; display: block; }
+.bar.hp i { background: linear-gradient(90deg, #2fbf7a, #55e39a); }
+.bar.mp i { background: linear-gradient(90deg, #2b6fd6, #56a8ff); }
+.bar em {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-style: normal; font-size: 9px; letter-spacing: 0.3px; color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+#pstat .sub { display: flex; justify-content: space-between; margin-top: 5px; font-size: 11px; color: #9fb6d0; }
+#pGold { color: #ffd85e; font-weight: 600; }
+
+/* ---------- 摇杆 ---------- */
+#joyZone { position: absolute; left: 0; bottom: 0; width: 46%; height: 62%; }
+#joyBase {
+  position: absolute; left: 150px; bottom: 168px;
+  width: 132px; height: 132px; border-radius: 50%;
+  border: 2px solid rgba(140, 180, 220, 0.3);
+  background: radial-gradient(circle, rgba(20, 32, 46, 0.5), rgba(10, 16, 24, 0.28));
+  transform: translate(-50%, 50%);
+  opacity: 0.85;
+}
+#joyKnob {
+  position: absolute; left: 50%; top: 50%; width: 58px; height: 58px; border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 35% 30%, rgba(180, 220, 255, 0.85), rgba(70, 110, 160, 0.75));
+  border: 1px solid rgba(200, 230, 255, 0.55);
+  box-shadow: 0 2px 12px rgba(60, 130, 220, 0.45);
+}
+
+/* ---------- 技能按钮 ---------- */
+#actions { position: absolute; right: 14px; bottom: 12px; width: 330px; height: 250px; }
+#actions button {
+  position: absolute; border: none; outline: none; color: #eaf4ff;
+  background: rgba(14, 22, 34, 0.82);
+  border: 1px solid rgba(130, 180, 230, 0.35);
+  font-family: inherit;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+#actions button:active { filter: brightness(1.4); }
+#actions.disabled { opacity: 0.35; pointer-events: none; filter: grayscale(0.6); }
+.skill {
+  width: 76px; height: 76px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; overflow: hidden;
+}
+.skill b { font-size: 19px; font-weight: 700; letter-spacing: 0.5px; line-height: 1.1; }
+.skill span { font-size: 10.5px; opacity: 0.9; margin-top: 2px; }
+.skill[data-i="0"] { right: 162px; bottom: 14px; }
+.skill[data-i="1"] { right: 136px; bottom: 122px; }
+.skill[data-i="2"] { right: 26px; bottom: 150px; }
+.skill.ready { border-color: rgba(255, 226, 122, 0.75); box-shadow: 0 0 14px rgba(255, 210, 90, 0.35); }
+.skill .cdfill {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: rgba(4, 8, 14, 0.72);
+}
+#btnAttack {
+  right: 20px; bottom: 16px; width: 96px; height: 96px; border-radius: 50%;
+  font-size: 16px; font-weight: 700;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 160, 90, 0.9), rgba(170, 60, 40, 0.9)) !important;
+  border-color: rgba(255, 200, 150, 0.6) !important;
+}
+.mini {
+  padding: 7px 12px; border-radius: 16px; font-size: 12px;
+  background: rgba(12, 18, 28, 0.8) !important;
+}
+#btnRecall { right: 16px; bottom: 292px; }
+#btnShop { right: 16px; bottom: 244px; }
+
+/* ---------- 击杀播报 ---------- */
+#feed { position: absolute; right: 14px; top: 12px; display: flex; flex-direction: column; gap: 5px; align-items: flex-end; }
+.feedItem {
+  padding: 6px 13px; border-radius: 12px; font-size: 13px;
+  background: rgba(8, 14, 22, 0.72); border: 1px solid rgba(120, 170, 220, 0.2);
+  animation: fadeIn 0.25s ease;
+}
+.feedItem .b { color: #7fb0ff; }
+.feedItem .r { color: #ff8f7d; }
+@keyframes fadeIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: none; } }
+
+/* ---------- 死亡遮罩 ---------- */
+#deadMask {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 6px; background: radial-gradient(circle at 50% 45%, rgba(90,0,0,0.10), rgba(20,0,0,0.55));
+  pointer-events: none;
+}
+#deadMask .tip { font-size: 15px; color: #ffd9d2; letter-spacing: 3px; text-shadow: 0 2px 10px rgba(0,0,0,0.9); }
+#deadMask .cd { font-size: 44px; font-weight: 700; color: #fff; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8); }
+
+/* ---------- 弹窗 ---------- */
+.modal {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(circle at 50% 40%, rgba(16, 30, 46, 0.92), rgba(3, 6, 10, 0.97));
+  z-index: 20; padding: 16px;
+}
+.panel {
+  width: min(940px, 96vw); max-height: 92vh; overflow-y: auto;
+  padding: 20px 22px; border-radius: 16px;
+  background: linear-gradient(160deg, rgba(20, 32, 48, 0.96), rgba(10, 16, 26, 0.98));
+  border: 1px solid rgba(120, 170, 220, 0.28);
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.6);
+}
+.panel h1 { font-size: 26px; letter-spacing: 3px; color: #ffe6a8; }
+.panel .sub { font-size: 12px; color: #8fa8c2; margin: 6px 0 14px; letter-spacing: 1px; }
+#heroGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.heroCard {
+  padding: 10px; border-radius: 12px; cursor: pointer;
+  background: rgba(16, 24, 36, 0.9);
+  border: 1px solid rgba(120, 170, 220, 0.2);
+  transition: transform 0.12s, border-color 0.12s;
+}
+.heroCard:active { transform: scale(0.97); border-color: rgba(255, 226, 122, 0.7); }
+.heroCard .art { position: relative; width: 100%; height: 132px; border-radius: 10px; overflow: hidden; margin-bottom: 8px; background: #0b1118; }
+.heroCard .art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; display: block; }
+.heroCard .art .rl {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 8px 5px;
+  font-size: 10px; color: #e8f1ff;
+  background: linear-gradient(180deg, rgba(6,10,16,0), rgba(6,10,16,0.92));
+}
+.heroCard .nm { font-size: 15px; font-weight: 600; letter-spacing: 1px; }
+.heroCard .sk { font-size: 10px; color: #a8bed6; margin-top: 8px; line-height: 1.6; }
+.heroCard .sk i { color: #ffd88a; font-style: normal; }
+button.ghost {
+  margin-top: 14px; padding: 9px 18px; border-radius: 18px;
+  background: transparent; color: #cfe0f2; font-size: 13px;
+  border: 1px solid rgba(140, 180, 220, 0.4);
+}
+button.ghost.small { margin: 0; padding: 5px 12px; font-size: 12px; }
+button.primary {
+  margin-top: 16px; padding: 11px 30px; border-radius: 22px;
+  background: linear-gradient(90deg, #e0a83c, #f5d373); color: #241a06;
+  font-size: 15px; font-weight: 700; border: none;
+}
+.panel.wide { width: min(1100px, 98vw); }
+.panelHead { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+.panelHead h2 { font-size: 18px; color: #ffe6a8; letter-spacing: 1px; }
+.panelHead span { font-size: 13px; color: #ffd85e; margin-left: auto; }
+.shopBody { display: flex; gap: 14px; }
+#shopGrid { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.itemCard {
+  padding: 8px; border-radius: 10px; cursor: pointer;
+  background: rgba(16, 24, 36, 0.9); border: 1px solid rgba(120, 170, 220, 0.18);
+}
+.itemCard:active { border-color: rgba(255, 226, 122, 0.7); }
+.itemCard .nm { font-size: 13px; font-weight: 600; }
+.itemCard .cost { font-size: 11px; color: #ffd85e; margin-top: 3px; }
+.itemCard .st { font-size: 10px; color: #9ab1c8; margin-top: 4px; line-height: 1.5; }
+.owned { width: 190px; flex: 0 0 auto; }
+.owned h3 { font-size: 13px; color: #cfdcea; margin-bottom: 8px; font-weight: 500; }
+.owned h3 span { color: #8fa8c2; font-size: 11px; }
+.ownedItem {
+  padding: 7px 9px; margin-bottom: 6px; border-radius: 8px; font-size: 11px;
+  background: rgba(20, 30, 44, 0.9); border: 1px solid rgba(120, 170, 220, 0.15);
+  display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+}
+.ownedItem em { font-style: normal; color: #ff9f8c; font-size: 10px; }
+.msg { margin-top: 10px; font-size: 12px; color: #ffcf7a; min-height: 16px; }
+#resultStats { margin-top: 10px; font-size: 13px; color: #b9cde0; line-height: 1.9; }
+#resultStats b { color: #ffe6a8; }
+
+#toast {
+  position: absolute; left: 50%; top: 64px; transform: translateX(-50%);
+  padding: 8px 18px; border-radius: 18px; font-size: 13px;
+  background: rgba(8, 14, 22, 0.9); border: 1px solid rgba(255, 210, 120, 0.45);
+  color: #ffd88a; z-index: 14; white-space: nowrap;
+}

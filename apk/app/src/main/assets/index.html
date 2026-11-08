@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>峡谷争锋</title>
+<link rel="stylesheet" href="css/ui.css">
+</head>
+<body>
+<div id="app">
+  <canvas id="game"></canvas>
+
+  <div id="hud" class="hidden">
+    <div id="topbar">
+      <div class="score blue"><span id="scoreBlue">0</span></div>
+      <div id="timer">00:00</div>
+      <div class="score red"><span id="scoreRed">0</span></div>
+    </div>
+
+    <canvas id="minimap" width="150" height="150"></canvas>
+
+    <div id="pstat">
+      <div class="row">
+        <img id="pAvatar" class="avatar" src="img/hero_ironwall.png" alt="">
+        <span id="pLevel">1</span>
+        <div class="bars">
+          <div class="bar hp"><i id="pHp"></i><em id="pHpTxt"></em></div>
+          <div class="bar mp"><i id="pMp"></i><em id="pMpTxt"></em></div>
+        </div>
+      </div>
+      <div class="sub">
+        <span id="pName">—</span>
+        <span id="pGold">500</span>
+      </div>
+    </div>
+
+    <div id="feed"></div>
+
+    <div id="joyZone">
+      <div id="joyBase"><div id="joyKnob"></div></div>
+    </div>
+
+    <div id="actions">
+      <button id="btnRecall" class="mini">回城</button>
+      <button id="btnShop" class="mini">商店</button>
+      <button id="btnAttack" class="atk">攻击</button>
+      <button class="skill" data-i="0"><b>Q</b><span></span></button>
+      <button class="skill" data-i="1"><b>W</b><span></span></button>
+      <button class="skill" data-i="2"><b>R</b><span></span></button>
+    </div>
+
+    <div id="toast" class="hidden"></div>
+
+    <div id="deadMask" class="hidden">
+      <div class="tip">你已阵亡</div>
+      <div class="cd" id="respawnCd">10</div>
+    </div>
+  </div>
+
+  <div id="pick" class="modal">
+    <div class="panel">
+      <h1>峡谷争锋</h1>
+      <p class="sub">5v5 三路推塔 · 选择你的英雄</p>
+      <div id="heroGrid"></div>
+      <button id="btnRandom" class="ghost">随机选择</button>
+    </div>
+  </div>
+
+  <div id="shop" class="modal hidden">
+    <div class="panel wide">
+      <div class="panelHead">
+        <h2>装备商店</h2>
+        <span id="shopGold">金币 0</span>
+        <button id="btnShopClose" class="ghost small">关闭</button>
+      </div>
+      <div class="shopBody">
+        <div id="shopGrid"></div>
+        <div class="owned">
+          <h3>已装备 <span id="slotCount">0/6</span></h3>
+          <div id="ownedList"></div>
+        </div>
+      </div>
+      <p id="shopMsg" class="msg"></p>
+    </div>
+  </div>
+
+  <div id="result" class="modal hidden">
+    <div class="panel">
+      <h1 id="resultTitle">胜利</h1>
+      <div id="resultStats"></div>
+      <button id="btnAgain" class="primary">再来一局</button>
+    </div>
+  </div>
+</div>
+<script>
+window.onerror=function(m,src,l,c,e){
+  document.title="JSERR:"+m+" @"+(src||"").split("/").pop()+":"+l;
+  try{
+    var d=document.getElementById('errbox');
+    if(!d){d=document.createElement('div');d.id='errbox';d.style.cssText='position:fixed;left:0;top:0;right:0;z-index:9999;padding:10px 14px;background:#7a1010;color:#fff;font:12px monospace;white-space:pre-wrap';document.body.appendChild(d);}
+    d.textContent+='[ERR] '+m+' @'+(src||'').split('/').pop()+':'+l+'\n';
+  }catch(x){}
+};
+</script>
+<script src="js/util.js"></script>
+<script src="js/data.js"></script>
+<script src="js/world.js"></script>
+<script src="js/sim.js"></script>
+<script src="js/render.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
